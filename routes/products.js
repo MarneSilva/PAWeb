@@ -3,10 +3,7 @@ import createError from '@fastify/error';
 export default async function products(app, options) {
     const InvalidProductError = createError('InvalidProductError', 'Produto Inválido.', 400);
 
-    const products = [
-        {id: 1, name: 'Tomate', qtd: 20},
-        {id: 2, name: 'Cebola', qtd: 50}
-    ]
+    const products = app.mongo.db.collection('products');
 
     app.get('/products',
      {
@@ -16,7 +13,7 @@ export default async function products(app, options) {
                 requireAuthentication: true
         }
     }, async (request, reply) => {
-        return products;
+        return products.find();
     });
 
     app.post('/products', {
