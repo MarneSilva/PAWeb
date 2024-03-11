@@ -1,36 +1,44 @@
 import fastify from 'fastify';
 import createError from '@fastify/error';
-import fastifyStatic from '@fastify/static';
-import spa from './routes/spa.js';
-import movies from './routes/movies.js';
-import products from './routes/products.js';
+import autoload from '@fastify/autoload';
+import jwt from '@fastify/jwt';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const MyCustomError = createError('MyCustomError', 'Something stranged happened.', 501);
 
 export async function build(opts){
     const app = fastify(opts);
 
-    app.register(fastifyStatic, {
-        root: `${import.meta.dirname}/public`,
-        wildcard: false
+    await app.register(jwt, {
+        secret: opts.jwt_secret
     });
-    
-    
+
+    await app.register(autoload, {
+        dir: join(__dirname, 'hooks'),
+        encapsulate: false
+    });
+
+    await app.register(autoload, {
+        dir: join(__dirname, 'routes')
+    });
+
 
     app.get('/error', (request, reply) => {
         throw new MyCustomError();
     });
-
-    app.register(spa);
-    app.register(movies);
-    app.register(products);
+ 
 
     app.setErrorHandler(async (error, request, reply) => {
-        const { validation } = error;
+        const  { validation } = error;
         request.log.error({ error });
         reply.code(error.statusCode || 500);
-        return validation ? `Validation error: ${validation[0].message}.` : 'Internal Server Error';
+
+        
+        return validation ? `Validation Error: ${validation[0].message}.` : 'Internal Server Error';
     });
 
     app.get('/notfound', async (request, reply) => {
