@@ -1,38 +1,26 @@
 /** @type{import('fastify').FastifyPluginAsync<>} */
-import createError from '@fastify/error';
+import {checkExistence, extractUser, logMe} from './functions/index.js';
 
 export default async function onRouteHook(app, options) {
-    const AuthError = createError('AuthError', 'Your access token is invalid or blank.', 401);
-    const TokenError = createError('TokenError', 'Invalid token.', 401);
-    const logMe = async (request, reply) => {
-        request.log.info(`Request for url: ${request.url}.`);
-    };
-
-    const extractUser = async (request, reply) => {
-        if (!request.headers['x-access-token']) throw new AuthError;
-        else {
-            app.jwt.verify(request.headers['x-access-token'], (err, decoded) => {
-                if(err) throw new TokenError
-                else {
-                    request.user = decoded.username;
-                }
-            })
-        }
-    }
-
     app.addHook('onRoute', (routeOptions) => {
         if(routeOptions.onRequest && !Array.isArray(routeOptions.onRequest)){
             routeOptions.onRequest = [routeOptions.onRequest];
-        } else {
+        }else{
             routeOptions.onRequest = [];
         }
-
-        if(routeOptions.config?.logMe){         
-            routeOptions.onRequest.push(logMe);
+        if(routeOptions.preHandler && !Array.isArray(routeOptions.preHandler)){
+            routeOptions.preHandler = [routeOptions.preHandler];
+        }else{
+            routeOptions.preHandler = [];
         }
-
+        if(routeOptions.config?.logMe){
+            routeOptions.onRequest.push(logMe(app));
+        }
         if(routeOptions.config?.requireAuthentication){
-            routeOptions.onRequest.push(extractUser);
+            routeOptions.onRequest.push(extractUser(app));
+        }
+        if(routeOptions.url === '/products' && routeOptions.method === 'POST') {
+            routeOptions.preHandler.push(checkExistence(app))
         }
     });
 }
