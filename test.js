@@ -1,22 +1,60 @@
-import test from 'node:test';
-import assert from 'node:assert';
-import { build } from './app.js';
+import { test, describe } from 'node:test';
+import assert, { equal, deepEqual } from 'node:assert';
+import { build, options } from './app.js';
 
-test('Basic Server', async (t) => {
-    const app = await build();
-
-    t.after(async() => {
-        await app.close();
-    });
+describe('###Tests for Server Configuration', async(t) =>  {
+    test('Test options configuration file', async (t) => {
+        const app = await build(options);
     
-    const response = await app.inject({
-        method: 'GET',
-        url: '/products'
+        t.after(async() => {
+            await app.close();
+        });
+        
+        deepEqual(options.stage, 'test');
+        deepEqual(options.port, '3000');
+        deepEqual(options.host, '127.0.0.1');
+        deepEqual(options.jwt_secret, 'Abcd@1234');
+        deepEqual(options.db_url, 'mongodb://localhost:27017/dositio');
     });
+})
 
-    assert.strictEqual(response.statusCode, 200);
-    assert.deepEqual(response.json(), [
-        {id: 1, name: 'Tomate', qtd: 20},
-        {id: 2, name: 'Cebola', qtd: 50}
-    ]);
+describe('###Tests for Unauthenticated routes', async(t) => {
+    describe('##Sucess Requests', async(t) => {
+        test('#GET /products', async(t) => {
+            const app = await build(options);
+    
+            t.after(async() => {
+            await app.close();
+            });
+
+            const response = await app.inject({
+                method: 'GET',
+                url: '/products'
+            });
+
+            equal(response.statusCode, 200);
+        })
+
+        test('# GET /categories', async(t) => {
+            const app = await build(options);
+
+            t.after(async() => {
+                await app.close();
+                });
+
+            const response = await app.inject({
+                method: 'GET',
+                url: '/categories'
+            });
+
+            equal(response.statusCode, 200)
+        })
+    });
+    describe('##Bad Requests', async(t) => {
+        
+    });
+});
+
+describe('###Tests for Authenticated routes', async(t) => {
+    
 });
