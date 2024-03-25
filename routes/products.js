@@ -12,9 +12,9 @@ export default async function products(app, options) {
             }
         }, 
         async (request, reply) => {
-            request.log.info(products);
-        return await products.find().toArray();
-    });
+            return await products.find().toArray();
+        }
+    );
 
     app.post('/products', {
         schema: {
@@ -33,13 +33,16 @@ export default async function products(app, options) {
         }
     }, async (request, reply) => {
         let product = request.body;
-        await products.insertOne(product)
+        
+        await products.insertOne(product);
+
         return reply.code(201).send();
     });
 
     app.get('/products/:id', async (request, reply) => {
-        let id = request.params.id;
+        let id =  request.params.id;
         let product = await products.findOne({_id: new app.mongo.ObjectId(id)});
+        
         return product;
     });
     
@@ -47,23 +50,29 @@ export default async function products(app, options) {
         config: {
             requireAuthentication: true
         }
-    },
-     async (request, reply) => {
-        let id = request.params.id;
-        await products.deleteOne({_id: new app.mongo.ObjectId(id)});
-        return reply.code(204).send()
+    }, async (request, reply) => {
+        let id =  request.params.id;
         
+        await products.deleteOne({_id: new app.mongo.ObjectId(id)});
+        
+        return reply.code(204).send();;
     });
 
-    app.put('/products/:id', async (request, reply) => {
-        let id = request.params.id;
+    app.put('/products/:id', {
+        config: {
+            requireAuthentication: true
+        }
+    }, async (request, reply) => {
+        let id =  request.params.id;
         let product = request.body;
+        
         await products.updateOne({_id: new app.mongo.ObjectId(id)}, {
             $set: {
                 name: product.name,
                 qtd: product.qtd
             }
         });
-        return reply.code(204).send()
+        
+        return reply.code(204).send();;
     });
 }

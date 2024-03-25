@@ -20,6 +20,6 @@ export const NOT_FOUND = createError(
 
 export const ALREADY_EXISTS = createError(
     'ALREADY_EXISTS',
-    'This resources already exists in database',
+    'This resource already exists in database.',
     412
-)
+);
