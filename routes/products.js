@@ -21,15 +21,17 @@ export default async function products(app, options) {
             body: {
                 type: 'object',
                 properties: {
-                    id: { type: 'integer' },
+                    _id: { type: 'string' },
                     name: { type: 'string' },
-                    qtd: { type: 'integer' }
+                    qtd: { type: 'integer' },
+                    category: { type: 'string' }
                 },
-                required: ['name', 'qtd']
+                required: ['name', 'qtd', 'category']
             }
         },
         config: {
-            requireAuthentication: true
+            requireAuthentication: true,
+            checkAdmin: true
         }
     }, async (request, reply) => {
         let product = request.body;
@@ -41,38 +43,54 @@ export default async function products(app, options) {
 
     app.get('/products/:id', async (request, reply) => {
         let id =  request.params.id;
-        let product = await products.findOne({_id: new app.mongo.ObjectId(id)});
+        let product = await products.findOne({_id: id});
         
         return product;
     });
     
     app.delete('/products/:id', {
         config: {
-            requireAuthentication: true
+            requireAuthentication: true,
+            checkAdmin: true
         }
     }, async (request, reply) => {
         let id =  request.params.id;
         
-        await products.deleteOne({_id: new app.mongo.ObjectId(id)});
+        await products.deleteOne({_id: id});
         
-        return reply.code(204).send();;
+        return reply.code(204).send();
     });
 
     app.put('/products/:id', {
+        schema: {
+            body: {
+                type: 'object',
+                properties: {
+                    _id: { type: 'string' },
+                    name: { type: 'string' },
+                    qtd: { type: 'integer' },
+                    category: { type: 'string' }
+                },
+                required: ['name', 'qtd', 'category']
+            }
+        },
         config: {
-            requireAuthentication: true
+            requireAuthentication: true,
+            checkAdmin: true
         }
     }, async (request, reply) => {
         let id =  request.params.id;
         let product = request.body;
         
-        await products.updateOne({_id: new app.mongo.ObjectId(id)}, {
+        await products.updateOne({_id: id}, {
             $set: {
                 name: product.name,
-                qtd: product.qtd
+                qtd: product.qtd,
+                category: product.category
+
             }
         });
         
-        return reply.code(204).send();;
+        return reply.code(204).send();
     });
 }

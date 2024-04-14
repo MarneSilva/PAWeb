@@ -1,5 +1,6 @@
 /** @type{import('fastify').FastifyPluginAsync<>} */
-import {checkExistence, checkExistenceCategories, checkExistenceUsers, extractUser, logMe} from './functions/index.js';
+import {checkExistence, checkExistenceCat, checkExistenceReg, extractUser, logMe} from './functions/index.js';
+import { userIsAdmin } from './functions/register/userIsAdmin.js';
 
 export default async function onRouteHook(app, options) {
     app.addHook('onRoute', (routeOptions) => {
@@ -20,14 +21,17 @@ export default async function onRouteHook(app, options) {
         if(routeOptions.config?.requireAuthentication){
             routeOptions.onRequest.push(extractUser(app));
         }
+        if(routeOptions.config?.checkAdmin){
+            routeOptions.onRequest.push(userIsAdmin(app));
+        }
         if(routeOptions.url === '/products' && routeOptions.method === 'POST'){
             routeOptions.preHandler.push(checkExistence(app));
         }
         if(routeOptions.url === '/categories' && routeOptions.method === 'POST'){
-            routeOptions.preHandler.push(checkExistenceCategories(app));
+            routeOptions.preHandler.push(checkExistenceCat(app));
         }
-        if(routeOptions.url === '/users' && routeOptions.method === 'POST'){
-            routeOptions.preHandler.push(checkExistenceUsers(app));
+        if(routeOptions.url === '/register' && routeOptions.method === 'POST'){
+            routeOptions.preHandler.push(checkExistenceReg(app));
         }
     });
 }

@@ -23,3 +23,9 @@ export const ALREADY_EXISTS = createError(
     'This resource already exists in database.',
     412
 );
+
+export const UNAUTHORIZED_PERSONNEL = createError(
+    'UNAUTHORIZED_PERSONNEL',
+    'The user who is trying to access the route is not admin.',
+    401
+)

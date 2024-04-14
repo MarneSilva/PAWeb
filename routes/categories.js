@@ -1,9 +1,9 @@
 /** @type{import('fastify').FastifyPluginAsync<>} */
 import createError from '@fastify/error';
 export default async function categories(app, options) {
-    const InvalidcategorieError = createError('InvalidcategorieError', 'Categoria Inválida.', 400);
-
+    const InvalidCategoriesError = createError('InvalidCategoriesError', 'Categoria Inválida.', 400);
     const categories = app.mongo.db.collection('categories');
+    const products = app.mongo.db.collection('products');
 
     app.get('/categories', 
         {
@@ -16,60 +16,85 @@ export default async function categories(app, options) {
         }
     );
 
+    app.get('/categories/:id/products', 
+        {
+            config: {
+                logMe: true
+            }
+        },
+        async (request, reply) => {
+            let category = await categories.findOne({_id: request.params.id});
+            let categoryName = category.name;
+            let productsCategory = await products.find({category: categoryName}).toArray();
+            return productsCategory;   
+        }
+    )
     app.post('/categories', {
         schema: {
             body: {
                 type: 'object',
                 properties: {
-                    id: { type: 'integer' },
-                    img_url: {type: 'string'},
+                    _id: { type: 'string' },
                     name: { type: 'string' },
+                    img_url: {type: 'string'}
                 },
                 required: ['name', 'img_url']
             }
         },
         config: {
-            requireAuthentication: false
+            requireAuthentication: true,
+            checkAdmin: true
         }
     }, async (request, reply) => {
-        let categorie = request.body;
-        
-        await categories.insertOne(categorie);
-
+        let category = request.body; 
+        await categories.insertOne(category);
         return reply.code(201).send();
     });
-
+    
     app.get('/categories/:id', async (request, reply) => {
         let id =  request.params.id;
-        let categorie = await categories.findOne({_id: new app.mongo.ObjectId(id)});
+        let category = await categories.findOne({_id: id});
         
-        return categorie;
+        return category;
     });
     
     app.delete('/categories/:id', {
         config: {
-            requireAuthentication: true
+            requireAuthentication: true,
+            checkAdmin: true
         }
     }, async (request, reply) => {
         let id =  request.params.id;
         
-        await categories.deleteOne({_id: new app.mongo.ObjectId(id)});
+        await categories.deleteOne({_id: id});
         
         return reply.code(204).send();;
     });
 
     app.put('/categories/:id', {
+        schema: {
+            body: {
+                type: 'object',
+                properties: {
+                    _id: { type: 'string' },
+                    name: { type: 'string' },
+                    img_url: {type: 'string'}
+                },
+                required: ['name', 'img_url']
+            }
+        },
         config: {
-            requireAuthentication: true
+            requireAuthentication: true,
+            checkAdmin: true
         }
     }, async (request, reply) => {
         let id =  request.params.id;
-        let categorie = request.body;
+        let category = request.body;
         
-        await categories.updateOne({_id: new app.mongo.ObjectId(id)}, {
+        await categories.updateOne({_id: id}, {
             $set: {
-                name: categorie.name,
-                img_url: categorie.img_url
+                name: category.name,
+                img_url: category.img_url
             }
         });
         

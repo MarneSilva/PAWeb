@@ -13,7 +13,7 @@ export const options = {
     stage: process.env.STAGE,
     port: process.env.PORT,
     host: process.env.HOST,
-    logger: process.env.STAGE === 'dev' ? { transport : { target: 'pino-pretty'} } : false,
+    logger: process.env.STAGE === 'dev' || 'test' ? { transport : { target: 'pino-pretty'} } : false,
     jwt_secret: process.env.JWT_SECRET,
     db_url: process.env.DB_URL
 };
@@ -58,7 +58,6 @@ export async function build(opts){
         request.log.error({ error });
         reply.code(error.statusCode || 500);
 
-        
         return validation ? `Validation Error: ${validation[0].message}.` : 'Internal Server Error';
     });
 
