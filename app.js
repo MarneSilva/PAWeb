@@ -13,7 +13,7 @@ export const options = {
     stage: process.env.STAGE,
     port: process.env.PORT,
     host: process.env.HOST,
-    logger: process.env.STAGE === 'dev' || 'test' ? { transport : { target: 'pino-pretty'} } : false,
+    logger: process.env.STAGE === 'dev' ? { transport : { target: 'pino-pretty'} } : false,
     jwt_secret: process.env.JWT_SECRET,
     db_url: process.env.DB_URL
 };
@@ -22,7 +22,7 @@ export const options = {
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const MyCustomError = createError('MyCustomError', 'Something stranged happened.', 501);
+const MyCustomError = createError('MyCustomError', 'Something stranged happened.', 500);
 
 export async function build(opts){
     const app = fastify(opts);
@@ -49,14 +49,14 @@ export async function build(opts){
 
 
     app.get('/error', (request, reply) => {
-        throw new MyCustomError();
+        throw new MyCustomError()
     });
  
 
     app.setErrorHandler(async (error, request, reply) => {
         const  { validation } = error;
         request.log.error({ error });
-        reply.code(error.statusCode || 500);
+        reply.code(500).send()
 
         return validation ? `Validation Error: ${validation[0].message}.` : 'Internal Server Error';
     });

@@ -73,7 +73,7 @@ describe("##Describe test", async (t) => {
             },
             headers: {
                 "isadmin": "true",
-                "x-access-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1p2VybmFtZSI6IkNhcm9saW5lIiwiaWF0IjoxNzEzMDQxNDgzfQ.sCSpGc0RCVvp7jz9lPvEJYVfaZsmbB12AWKs3LJ1BX4"
+                "x-access-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ik1hcm5lIiwiaWF0IjoxNzEzMjA5ODEzfQ.Wdck90mMKL43KhvaqGTRLaZTiXfKx3dC3yCS2iCeP8Y"
             }
         });
 
@@ -96,7 +96,7 @@ describe("##Describe test", async (t) => {
                 },
                 headers: {
                     "isadmin": "true",
-                    "x-access-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1p2VybmFtZSI6IkNhcm9saW5lIiwiaWF0IjoxNzEzMDQxNDgzfQ.sCSpGc0RCVvp7jz9lPvEJYVfaZsmbB12AWKs3LJ1BX4"
+                    "x-access-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ik1hcm5lIiwiaWF0IjoxNzEzMjA5ODEzfQ.Wdck90mMKL43KhvaqGTRLaZTiXfKx3dC3yCS2iCeP8Y"
                 }
             });
     
@@ -191,7 +191,7 @@ describe("##Describe test", async (t) => {
                         "category": "Comida"
                     },
                     headers: {
-                        "x-access-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1p2VybmFtZSI6IkNhcm9saW5lIiwiaWF0IjoxNzEzMDQxNDgzfQ.sCSpGc0RCVvp7jz9lPvEJYVfaZsmbB12AWKs3LJ1BX4",
+                        "x-access-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ik1hcm5lIiwiaWF0IjoxNzEzMjA5ODEzfQ.Wdck90mMKL43KhvaqGTRLaZTiXfKx3dC3yCS2iCeP8Y",
                         "isadmin": "true"
                     }
                 });
@@ -213,7 +213,7 @@ describe("##Describe test", async (t) => {
                         "img_url": "teste"
                     },
                     headers: {
-                        "x-access-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1p2VybmFtZSI6IkNhcm9saW5lIiwiaWF0IjoxNzEzMDQxNDgzfQ.sCSpGc0RCVvp7jz9lPvEJYVfaZsmbB12AWKs3LJ1BX4",
+                        "x-access-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ik1hcm5lIiwiaWF0IjoxNzEzMjA5ODEzfQ.Wdck90mMKL43KhvaqGTRLaZTiXfKx3dC3yCS2iCeP8Y",
                         "isadmin": "true"
                     }
                 });
@@ -238,7 +238,7 @@ describe("##Describe test", async (t) => {
                 "category": "Comida"
             },
             headers: {
-                "x-access-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1p2VybmFtZSI6IkNhcm9saW5lIiwiaWF0IjoxNzEzMDQxNDgzfQ.sCSpGc0RCVvp7jz9lPvEJYVfaZsmbB12AWKs3LJ1BX4",
+                "x-access-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ik1hcm5lIiwiaWF0IjoxNzEzMjA5ODEzfQ.Wdck90mMKL43KhvaqGTRLaZTiXfKx3dC3yCS2iCeP8Y",
                 "isadmin": "true"
             }
         });
@@ -261,7 +261,7 @@ describe("##Describe test", async (t) => {
                 "img_url": "teste"
             },
             headers: {
-                "x-access-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1p2VybmFtZSI6IkNhcm9saW5lIiwiaWF0IjoxNzEzMDQxNDgzfQ.sCSpGc0RCVvp7jz9lPvEJYVfaZsmbB12AWKs3LJ1BX4",
+                "x-access-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ik1hcm5lIiwiaWF0IjoxNzEzMjA5ODEzfQ.Wdck90mMKL43KhvaqGTRLaZTiXfKx3dC3yCS2iCeP8Y",
                 "isadmin": "true"
             }
         });
@@ -289,15 +289,25 @@ describe("##Describe test", async (t) => {
         equal(response.statusCode, 412);
     })
 
-    test('# GET / for Internal Server Error', async (t) => {
+    test('# for Internal Server Error (DUPLICATED ID)', async (t) => {
         const app = await build(options);
 
         t.after(async () => {
             await app.close();
         });
         const response = await app.inject({
-            method: 'GET',
-            url: '/'
+            method: 'POST',
+            url: '/products',
+            body: {
+                "_id": "1p",
+                "name": "Cerveja",
+                "qtd": 15,
+                "category": "Bebida"
+            },
+            headers: {
+                "isadmin": "true",
+                "x-access-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ik1hcm5lIiwiaWF0IjoxNzEzMjA5ODEzfQ.Wdck90mMKL43KhvaqGTRLaZTiXfKx3dC3yCS2iCeP8Y"
+            }
         });
 
         equal(response.statusCode, 500);
@@ -396,7 +406,7 @@ describe("##Describe test", async (t) => {
                 "category": "Comida"
             },
             headers: {
-                "x-access-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1p2VybmFtZSI6Ik1hcm5lIiwiaXNBZG1pbiI6ZmFsc2UsImlhdCI6MTcxMzEwODcyMn0.TsaoR6yXiYjqDN2jXU0MED2g6AW4V90TtNFeMGShXuE",
+                "x-access-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ik1hcm5lIiwiaWF0IjoxNzEzMjEyMDUxfQ.vDBxZ_ZUlsRdu25rscauHojoNQP6ID5lPWlnB6o_J1I",
                 "isadmin": "false"
             }
         });
@@ -415,14 +425,14 @@ describe("##Describe test", async (t) => {
             url: '/products/1p',
             headers: {
                 "isadmin": "true",
-                "x-access-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1p2VybmFtZSI6IkNhcm9saW5lIiwiaWF0IjoxNzEzMDQxNDgzfQ.sCSpGc0RCVvp7jz9lPvEJYVfaZsmbB12AWKs3LJ1BX4"
+                "x-access-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ik1hcm5lIiwiaWF0IjoxNzEzMjA5ODEzfQ.Wdck90mMKL43KhvaqGTRLaZTiXfKx3dC3yCS2iCeP8Y"
             }
         });
 
         equal(response.statusCode, 204);
     });
 
-    test('# DELETE /categories/1p', async (t) => {
+    test('# DELETE /categories/1c', async (t) => {
         const app = await build(options);
 
         t.after(async () => {
@@ -430,10 +440,10 @@ describe("##Describe test", async (t) => {
         });
         const response = await app.inject({
             method: 'DELETE',
-            url: '/categories/1p',
+            url: '/categories/1c',
             headers: {
                 "isadmin": "true",
-                "x-access-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1p2VybmFtZSI6IkNhcm9saW5lIiwiaWF0IjoxNzEzMDQxNDgzfQ.sCSpGc0RCVvp7jz9lPvEJYVfaZsmbB12AWKs3LJ1BX4"
+                "x-access-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ik1hcm5lIiwiaWF0IjoxNzEzMjA5ODEzfQ.Wdck90mMKL43KhvaqGTRLaZTiXfKx3dC3yCS2iCeP8Y"
             }
         });
 
