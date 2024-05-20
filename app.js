@@ -6,6 +6,7 @@ import jwt from '@fastify/jwt';
 import { fileURLToPath } from 'url';
 import path from 'path';
 import dotenv from 'dotenv';
+import cors from '@fastify/cors'
 
 dotenv.config();
 
@@ -26,6 +27,10 @@ const MyCustomError = createError('MyCustomError', 'Something stranged happened.
 
 export async function build(opts){
     const app = fastify(opts);
+
+    await app.register(cors, {
+        origin: true
+    })
 
     await app.register(jwt, {
         secret: opts.jwt_secret
